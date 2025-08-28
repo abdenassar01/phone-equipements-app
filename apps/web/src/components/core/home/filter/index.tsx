@@ -84,7 +84,7 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
   const hasActiveFilters = filters.search || filters.phoneMark !== 'All Brands' || filters.equipmentType !== 'All Types'
 
   return (
-    <div className="p-4 bg-card rounded-lg border shadow-sm">
+    <div className="p-2 bg-card rounded-lg border border-pink-500/20">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Filter Equipment</h3>
         {hasActiveFilters && (
@@ -100,7 +100,6 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
         )}
       </div>
 
-      {/* Search Field */}
       <div className="relative">
         <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
         <Input
@@ -111,9 +110,7 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
         />
       </div>
 
-      {/* Filter Dropdowns */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Phone Mark Dropdown */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-foreground">Phone Brand</label>
           <DropdownMenu>
@@ -148,7 +145,6 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
           </DropdownMenu>
         </div>
 
-        {/* Equipment Type Dropdown */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-foreground">Equipment Type</label>
           <DropdownMenu>
@@ -184,7 +180,6 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
         </div>
       </div>
 
-      {/* Active Filters Display */}
       {hasActiveFilters && (
         <div className="flex flex-wrap gap-2 pt-2 border-t">
           <span className="text-sm text-muted-foreground">Active filters:</span>

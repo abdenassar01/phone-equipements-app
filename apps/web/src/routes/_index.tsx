@@ -1,5 +1,7 @@
 import type { Route } from "./+types/_index";
-import {  EquipmentsFilter } from "../components";
+import {  EquipmentCard, EquipmentsFilter } from "../components";
+import { useQuery } from "convex/react";
+import { api } from "@phone-equipements-app/backend/convex/_generated/api";
 
 export function meta({}: Route.MetaArgs) {
 	return [
@@ -12,11 +14,27 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
+	const equipments = useQuery(api.equipments.getAllEquipments, {limit: 100})
 
 	return (
-		<div className="container mx-auto max-w-3xl py-2">
+		<div className="">
 			<EquipmentsFilter />
-			<div className="">The List of products</div>
+			<div className="py-2 gap-2 flex flex-col sm:flex-row sm:flex-wrap sm:justify-between">
+				{equipments === undefined && <div>loading...</div>}
+				{equipments?.map((equipment) => (
+					<EquipmentCard key={equipment._id} equipment={equipment} />
+				))}{equipments?.map((equipment) => (
+					<EquipmentCard key={equipment._id} equipment={equipment} />
+				))}{equipments?.map((equipment) => (
+					<EquipmentCard key={equipment._id} equipment={equipment} />
+				))}{equipments?.map((equipment) => (
+					<EquipmentCard key={equipment._id} equipment={equipment} />
+				))}{equipments?.map((equipment) => (
+					<EquipmentCard key={equipment._id} equipment={equipment} />
+				))}{equipments?.map((equipment) => (
+					<EquipmentCard key={equipment._id} equipment={equipment} />
+				))}
+			</div>
 		</div>
 	);
 }

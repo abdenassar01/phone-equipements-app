@@ -20,10 +20,9 @@ export const getAllAccessories = query({
 	handler: async (ctx, args) => {
 		let query = ctx.db.query("accessories").order("desc");
 
-		if (args.limit) {
-      // @ts-ignore
-			query = query.take(args.limit);
-		}
+		// if (args.limit) {
+		// 	query = query.take(args.limit);
+		// }
 
 		return await query.collect();
 	},

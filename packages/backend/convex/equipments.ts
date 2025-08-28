@@ -21,13 +21,14 @@ export const getAllEquipments = query({
 	},
 	handler: async (ctx, args) => {
 		let query = ctx.db.query("equipments").order("desc");
+    const nbrOfItems = args.limit || 100;
 
-		if (args.limit) {
-      // @ts-ignore
-			query = query.take(args.limit) ;
-		}
+		// if (args.limit) {
+    //   // @ts-ignore
+		// 	query = query.take(args.limit) ;
+		// }
 
-		return await query.collect();
+		return await query.take(nbrOfItems);
 	},
 });
 
