@@ -23,16 +23,6 @@ export default function Home() {
 				{equipments === undefined && <div>loading...</div>}
 				{equipments?.map((equipment) => (
 					<EquipmentCard key={equipment._id} equipment={equipment} />
-				))}{equipments?.map((equipment) => (
-					<EquipmentCard key={equipment._id} equipment={equipment} />
-				))}{equipments?.map((equipment) => (
-					<EquipmentCard key={equipment._id} equipment={equipment} />
-				))}{equipments?.map((equipment) => (
-					<EquipmentCard key={equipment._id} equipment={equipment} />
-				))}{equipments?.map((equipment) => (
-					<EquipmentCard key={equipment._id} equipment={equipment} />
-				))}{equipments?.map((equipment) => (
-					<EquipmentCard key={equipment._id} equipment={equipment} />
 				))}
 			</div>
 		</div>
