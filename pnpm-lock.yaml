@@ -14,6 +14,12 @@ importers:
 
   apps/web:
     dependencies:
+      '@hugeicons/core-free-icons':
+        specifier: ^1.0.16
+        version: 1.0.16
+      '@hugeicons/react':
+        specifier: ^1.0.5
+        version: 1.0.5(react@19.0.0)
       '@phone-equipements-app/backend':
         specifier: workspace:*
         version: link:../../packages/backend
@@ -628,6 +634,14 @@ packages:
 
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
+
+  '@hugeicons/core-free-icons@1.0.16':
+    resolution: {integrity: sha512-rm48rjUN8a58yOZ7mpk3HkMvZPmOMTkMtNdXXq9m0Af6BsRQWJZl+4zd6ssj52y+A9Zn4Yg/TptobNtNpx3GCg==}
+
+  '@hugeicons/react@1.0.5':
+    resolution: {integrity: sha512-mhcJF83hF4s0yu3eS6owDDzGSlSOGOFZ78eFbw7RqhNK/xYBLrffaBnqrtWWaUyr0F4o+RG2G1SYdyy9oyS1lQ==}
+    peerDependencies:
+      react: '>=16.0.0'
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -3557,6 +3571,12 @@ snapshots:
       react-dom: 19.0.0(react@19.0.0)
 
   '@floating-ui/utils@0.2.10': {}
+
+  '@hugeicons/core-free-icons@1.0.16': {}
+
+  '@hugeicons/react@1.0.5(react@19.0.0)':
+    dependencies:
+      react: 19.0.0
 
   '@isaacs/cliui@8.0.2':
     dependencies:
