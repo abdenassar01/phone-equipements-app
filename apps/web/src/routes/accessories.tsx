@@ -15,7 +15,7 @@ import { useMutation, useQuery } from "convex/react";
 import { api } from "@phone-equipements-app/backend/convex/_generated/api";
 import type { Id } from "@phone-equipements-app/backend/convex/_generated/dataModel";
 
-export default function Todos() {
+export default function Accessories() {
 	const [newTodoText, setNewTodoText] = useState("");
 
 	const todos = useQuery(api.todos.getAll);

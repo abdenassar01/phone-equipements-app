@@ -57,7 +57,7 @@ export default function App() {
 				disableTransitionOnChange
 				storageKey="vite-ui-theme"
 			>
-				<div className="grid grid-rows-[auto_1fr] h-svh">
+				<div className="grid grid-rows-[auto_1fr] h-svh container p-4 mx-auto">
 					<Header />
 					<Outlet />
 				</div>
