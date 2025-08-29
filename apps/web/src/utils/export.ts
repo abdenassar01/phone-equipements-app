@@ -9,7 +9,6 @@ declare module 'jspdf' {
   }
 }
 
-// Test function to verify jsPDF works
 export const testPDFGeneration = () => {
   try {
     console.log('Testing PDF generation...')
@@ -33,7 +32,6 @@ type Accessory = Doc<'accessories'> & {
   category: Doc<'accessoryCategories'> | null
 }
 
-// JSON Export Functions
 export const exportToJSON = (data: any[], filename: string) => {
   const jsonString = JSON.stringify(data, null, 2)
   const blob = new Blob([jsonString], { type: 'application/json' })
@@ -47,7 +45,6 @@ export const exportToJSON = (data: any[], filename: string) => {
   URL.revokeObjectURL(url)
 }
 
-// CSV Export Functions
 export const exportToCSV = (data: any[], filename: string, headers: string[]) => {
   const csvContent = [
     headers.join(','),
@@ -72,12 +69,10 @@ export const exportToCSV = (data: any[], filename: string, headers: string[]) =>
   URL.revokeObjectURL(url)
 }
 
-// Helper function to get nested values
 const getNestedValue = (obj: any, path: string): any => {
   return path.split('.').reduce((current, key) => current?.[key], obj)
 }
 
-// PDF Export Functions
 export const exportEquipmentsToPDF = (equipments: Equipment[]) => {
   try {
     console.log('Starting PDF export with equipments:', equipments)
@@ -92,18 +87,17 @@ export const exportEquipmentsToPDF = (equipments: Equipment[]) => {
     const doc = new jsPDF()
     console.log('jsPDF instance created successfully')
 
+    // Add title
     console.log('Adding title...')
     doc.setFontSize(20)
     doc.text('Liste des Équipements par Marque', 14, 22)
     console.log('Title added successfully')
 
-    // Add generation date
     console.log('Adding date...')
     doc.setFontSize(10)
     doc.text(`Généré le: ${new Date().toLocaleDateString('fr-FR')}`, 14, 30)
     console.log('Date added successfully')
 
-    // Group equipments by brand
     console.log('Grouping equipments by brand...')
     const groupedByBrand = equipments.reduce((acc, equipment) => {
       const brandName = equipment.brand?.name || 'Sans marque'
@@ -117,12 +111,10 @@ export const exportEquipmentsToPDF = (equipments: Equipment[]) => {
 
     let currentY = 40
 
-    // Create table for each brand
     console.log('Creating tables for each brand...')
     Object.entries(groupedByBrand).forEach(([brandName, brandEquipments]) => {
       console.log(`Processing brand: ${brandName} with ${brandEquipments.length} equipments`)
 
-      // Add brand header
       console.log('Adding brand header...')
       doc.setFontSize(14)
       doc.setFont("helvetica", 'bold')
@@ -130,12 +122,11 @@ export const exportEquipmentsToPDF = (equipments: Equipment[]) => {
       currentY += 10
       console.log('Brand header added successfully')
 
-      // Prepare table data for this brand
       console.log('Preparing table data...')
       const tableData: string[][] = []
       brandEquipments.forEach((equipment, index) => {
         console.log(`Processing equipment ${index + 1}:`, equipment.label)
-        // Check if equipment has variants property and it's an array
+
         const variants = (equipment as any).variants
         if (variants && Array.isArray(variants) && variants.length > 0) {
           variants.forEach((variant: any) => {
@@ -146,7 +137,6 @@ export const exportEquipmentsToPDF = (equipments: Equipment[]) => {
             ])
           })
         } else {
-          // If no variants, show basic equipment info
           tableData.push([
             equipment.label || 'Sans nom',
             'Modèle standard',
@@ -156,7 +146,6 @@ export const exportEquipmentsToPDF = (equipments: Equipment[]) => {
       })
       console.log(`Table data prepared for ${brandName}:`, tableData.length, 'rows')
 
-    // Add table for this brand
     console.log('Calling autoTable...')
     try {
       autoTable(doc, {
