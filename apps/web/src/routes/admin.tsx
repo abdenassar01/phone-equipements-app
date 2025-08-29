@@ -11,8 +11,9 @@ import { PlusIcon, EditIcon, TrashIcon, SaveIcon, XIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { FileUpload } from '@/components/ui/file-upload'
 import { ImageGallery, ImageDisplay } from '@/components/ui/image-display'
+import { DataExportPanel } from '@/components/admin/DataExportPanel'
 
-type TabType = 'brands' | 'equipmentTypes' | 'equipments' | 'accessoryCategories' | 'accessories'
+type TabType = 'brands' | 'equipmentTypes' | 'equipments' | 'accessoryCategories' | 'accessories' | 'dataExport'
 
 type ModalState = {
   isOpen: boolean
@@ -31,6 +32,7 @@ export default function AdminPanel() {
     { id: 'equipments' as const, label: 'Équipements' },
     { id: 'accessoryCategories' as const, label: 'Catégories d\'Accessoires' },
     { id: 'accessories' as const, label: 'Accessoires' },
+    { id: 'dataExport' as const, label: 'Export & Hors ligne' },
   ]
 
   const renderTabContent = () => {
@@ -45,6 +47,8 @@ export default function AdminPanel() {
         return <AccessoryCategoriesTab modalState={modalState} setModalState={setModalState} />
       case 'accessories':
         return <AccessoriesTab modalState={modalState} setModalState={setModalState} />
+      case 'dataExport':
+        return <DataExportTab />
       default:
         return <div>Sélectionnez un onglet pour gérer les données</div>
     }
@@ -81,6 +85,43 @@ export default function AdminPanel() {
         </div>
       </div>
     </div>
+  )
+}
+
+// Data Export Tab Component
+function DataExportTab() {
+  const equipments = useQuery(api.equipments.getAllEquipments, { limit: 1000 })
+  const accessories = useQuery(api.accessories.getAllAccessories, { limit: 1000 })
+  const brands = useQuery(api.brands.getAllBrands)
+  const equipmentTypes = useQuery(api.equipmentTypes.getAllEquipmentTypes)
+  const accessoryCategories = useQuery(api.accessoryCategories.getAllAccessoryCategories)
+
+  const isLoading = equipments === undefined ||
+                   accessories === undefined ||
+                   brands === undefined ||
+                   equipmentTypes === undefined ||
+                   accessoryCategories === undefined
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        <span className="ml-2">Chargement des données...</span>
+      </div>
+    )
+  }
+
+  return (
+    <DataExportPanel
+      equipments={equipments || []}
+      accessories={(accessories || []).map(acc => ({
+        ...acc,
+        category: null // Add required category property
+      }))}
+      brands={brands || []}
+      equipmentTypes={equipmentTypes || []}
+      accessoryCategories={accessoryCategories || []}
+    />
   )
 }
 
