@@ -25,7 +25,7 @@ export default function Header() {
 							<NavLink
 								key={to}
 								to={to}
-								className={({ isActive }) => cn('p-2 rounded-lg flex gap-2 w-[49%] justify-center text-sm items-center sm:w-fit', isActive ? 'bg-pink-500/10 text-pink-500' : '')}
+								className={({ isActive }) => cn('p-2 rounded-lg flex gap-1 w-[49%] justify-center text-sm items-center sm:w-fit', isActive ? 'bg-pink-500/10 text-pink-500' : '')}
 								end
 							>
 								<HugeiconsIcon icon={icon} size={20} />

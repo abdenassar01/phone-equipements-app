@@ -92,7 +92,6 @@ export const exportEquipmentsToPDF = (equipments: Equipment[]) => {
     const doc = new jsPDF()
     console.log('jsPDF instance created successfully')
 
-    // Add title
     console.log('Adding title...')
     doc.setFontSize(20)
     doc.text('Liste des Équipements par Marque', 14, 22)

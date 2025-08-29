@@ -5,6 +5,10 @@ import { api } from "@phone-equipements-app/backend/convex/_generated/api";
 import { useSearchParams } from "react-router";
 import { useMemo } from "react";
 import type { Id } from "@phone-equipements-app/backend/convex/_generated/dataModel";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { DocumentAttachmentFreeIcons } from "@hugeicons/core-free-icons";
+import { exportEquipmentsToPDF } from "../utils/export";
+import { toast } from "sonner";
 
 export function meta({}: Route.MetaArgs) {
 	return [
@@ -58,6 +62,7 @@ export default function Home() {
 
 
 	const equipments = useQuery(api.equipments.getAllEquipments, queryParams);
+	const allEquipments = useQuery(api.equipments.getAllEquipments, { limit: 10000 });
 
 	const handleFilterChange = (filters: { search: string; phoneMark: string;equipmentType: string }) => {
 		const newParams = new URLSearchParams();
@@ -69,8 +74,24 @@ export default function Home() {
 		setSearchParams(newParams);
 	};
 
+	const handleDownloadPDF = async () => {
+		try {
+			if (!allEquipments || allEquipments.length === 0) {
+				toast.error('Aucun équipement à exporter');
+				return;
+			}
+
+			toast.info('Génération du PDF en cours...');
+			await exportEquipmentsToPDF(allEquipments);
+			toast.success('PDF téléchargé avec succès!');
+		} catch (error) {
+			console.error('Erreur lors du téléchargement PDF:', error);
+			toast.error(`Erreur lors du téléchargement: ${error instanceof Error ? error.message : 'Erreur inconnue'}`);
+		}
+	};
+
 	return (
-		<div className="">
+		<div className="relative">
 			<EquipmentsFilter onFilterChange={handleFilterChange} />
 			<div className="py-2 gap-2 flex flex-col sm:flex-row sm:flex-wrap sm:justify-between">
 				{equipments === undefined && <div>chargement...</div>}
@@ -78,6 +99,13 @@ export default function Home() {
 					<EquipmentCard key={equipment._id} equipment={equipment} />
 				))}
 			</div>
+			<button
+				onClick={handleDownloadPDF}
+				className="absolute bottom-1 right-1 p-2 px-4 rounded-lg bg-purple-500/10 items-center text-purple-500 flex gap-2 hover:bg-purple-500/20 transition-colors cursor-pointer"
+			>
+				<HugeiconsIcon icon={DocumentAttachmentFreeIcons} size={20}  />
+				<span>Telecharger PDF</span>
+			</button>
 		</div>
 	);
 }
