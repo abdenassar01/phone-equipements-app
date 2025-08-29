@@ -407,16 +407,14 @@ function EquipmentsTab({ modalState, setModalState }: { modalState: ModalState |
   const [variants, setVariants] = useState<Array<{
     label: string
     price: string
-    stock: string
-  }>>([{ label: '', price: '', stock: '' }])
+  }>>([{ label: '', price: '' }])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
       const variantsArray = variants.map(v => ({
         label: v.label,
-        price: parseFloat(v.price),
-        stock: v.stock
+        price: parseFloat(v.price)
       })).filter(v => v.label && v.price)
 
       if (modalState?.type === 'create') {
@@ -439,7 +437,7 @@ function EquipmentsTab({ modalState, setModalState }: { modalState: ModalState |
       }
       setModalState(null)
       setFormData({ label: '', description: '', brandId: '', equipmentTypeId: '' })
-      setVariants([{ label: '', price: '', stock: '' }])
+      setVariants([{ label: '', price: '' }])
     } catch (error) {
       console.error('Error saving equipment:', error)
     }
@@ -455,8 +453,7 @@ function EquipmentsTab({ modalState, setModalState }: { modalState: ModalState |
     })
     setVariants(equipment.variants.map(v => ({
       label: v.label || '',
-      price: v.price?.toString() || '',
-      stock: v.stock || ''
+      price: v.price?.toString() || ''
     })))
   }
 
@@ -469,17 +466,17 @@ function EquipmentsTab({ modalState, setModalState }: { modalState: ModalState |
   const openCreateModal = () => {
     setModalState({ isOpen: true, type: 'create', entity: 'equipments' })
     setFormData({ label: '', description: '', brandId: '', equipmentTypeId: '' })
-    setVariants([{ label: '', price: '', stock: '' }])
+    setVariants([{ label: '', price: '' }])
   }
 
   const closeModal = () => {
     setModalState(null)
     setFormData({ label: '', description: '', brandId: '', equipmentTypeId: '' })
-    setVariants([{ label: '', price: '', stock: '' }])
+    setVariants([{ label: '', price: '' }])
   }
 
   const addVariant = () => {
-    setVariants([...variants, { label: '', price: '', stock: '' }])
+    setVariants([...variants, { label: '', price: '' }])
   }
 
   const removeVariant = (index: number) => {
@@ -593,7 +590,7 @@ function EquipmentsTab({ modalState, setModalState }: { modalState: ModalState |
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
                       <Label htmlFor={`variant-label-${index}`}>Libellé</Label>
                       <Input
@@ -613,16 +610,6 @@ function EquipmentsTab({ modalState, setModalState }: { modalState: ModalState |
                         value={variant.price}
                         onChange={(e) => updateVariant(index, 'price', e.target.value)}
                         placeholder="0,00"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor={`variant-stock-${index}`}>Stock</Label>
-                      <Input
-                        id={`variant-stock-${index}`}
-                        value={variant.stock}
-                        onChange={(e) => updateVariant(index, 'stock', e.target.value)}
-                        placeholder="Quantité en stock"
                         required
                       />
                     </div>

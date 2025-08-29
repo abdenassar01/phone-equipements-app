@@ -5,7 +5,6 @@ const variantSchema = v.object({
 	label: v.string(),
 	price: v.number(),
 	sku: v.optional(v.string()),
-	inStock: v.optional(v.boolean()),
 	attributes: v.optional(v.object({
 		color: v.optional(v.string()),
 		size: v.optional(v.string()),
