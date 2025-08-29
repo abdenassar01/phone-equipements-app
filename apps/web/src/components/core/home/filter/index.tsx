@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useQuery } from 'convex/react'
+import { api } from '@phone-equipements-app/backend/convex/_generated/api'
 import { Input } from '../../../ui/input'
 import { Button } from '../../../ui/button'
 import {
@@ -22,48 +24,21 @@ interface EquipmentsFilterProps {
   onFilterChange?: (filters: FilterState) => void
 }
 
-const phoneMarks = [
-  'All Brands',
-  'Apple',
-  'Samsung',
-  'Google',
-  'OnePlus',
-  'Xiaomi',
-  'Huawei',
-  'Sony',
-  'LG',
-  'Motorola',
-  'Nokia',
-  'Oppo',
-  'Vivo',
-  'Realme'
-]
 
-const equipmentTypes = [
-  'All Types',
-  'Screen',
-  'Glass',
-  'Battery',
-  'Back Cover',
-  'Camera Lens',
-  'Charging Port',
-  'Speaker',
-  'Microphone',
-  'Home Button',
-  'Power Button',
-  'Volume Button',
-  'SIM Tray',
-  'Headphone Jack',
-  'Antenna',
-  'Flex Cable'
-]
 
 export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
+  const brands = useQuery(api.brands.getAllBrands)
+  const equipmentTypes = useQuery(api.equipmentTypes.getAllEquipmentTypes)
+
   const [filters, setFilters] = useState<FilterState>({
     search: '',
     phoneMark: 'All Brands',
     equipmentType: 'All Types'
   })
+
+  // Create arrays with "All" options and database data
+  const phoneMarks = ['All Brands', ...(brands?.map(brand => brand.name) || [])]
+  const equipmentTypeOptions = ['All Types', ...(equipmentTypes?.map(type => type.name) || [])]
 
   const updateFilter = (key: keyof FilterState, value: string) => {
     const newFilters = { ...filters, [key]: value }
@@ -163,7 +138,7 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuLabel>Select Type</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {equipmentTypes.map((type) => (
+              {equipmentTypeOptions.map((type) => (
                 <DropdownMenuItem
                   key={type}
                   onClick={() => updateFilter('equipmentType', type)}
