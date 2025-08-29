@@ -11,30 +11,30 @@ interface ImageDisplayProps {
   height?: number
 }
 
-export function ImageDisplay({ 
-  storageId, 
-  alt = 'Image', 
-  className = '', 
-  width, 
-  height 
+export function ImageDisplay({
+  storageId,
+  alt = 'Image',
+  className = '',
+  width,
+  height
 }: ImageDisplayProps) {
   const imageUrl = useQuery(api.files.getFileUrl, { storageId })
 
   if (!imageUrl) {
     return (
-      <div 
-        className={`bg-gray-200 animate-pulse flex items-center justify-center ${className}`}
+      <div
+        className={`bg-gray-200 flex items-center justify-center ${className}`}
         style={{ width, height }}
       >
-        <span className="text-gray-400 text-sm">Chargement...</span>
+        <div className="animate-spin rounded-full h-6 w-6 border-2 border-gray-300 border-t-pink-600"></div>
       </div>
     )
   }
 
   return (
-    <img 
-      src={imageUrl} 
-      alt={alt} 
+    <img
+      src={imageUrl}
+      alt={alt}
       className={className}
       width={width}
       height={height}
@@ -50,12 +50,12 @@ interface ImageGalleryProps {
   maxImages?: number
 }
 
-export function ImageGallery({ 
-  storageIds, 
-  alt = 'Image', 
-  className = '', 
+export function ImageGallery({
+  storageIds,
+  alt = 'Image',
+  className = '',
   imageClassName = '',
-  maxImages 
+  maxImages
 }: ImageGalleryProps) {
   const displayIds = maxImages ? storageIds.slice(0, maxImages) : storageIds
   const remainingCount = storageIds.length - displayIds.length

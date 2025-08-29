@@ -65,7 +65,19 @@ export const getAllEquipments = query({
 			);
 		}
 
-		return equipments;
+		const enrichedEquipments = await Promise.all(
+			equipments.map(async (equipment) => {
+				const brand = await ctx.db.get(equipment.brandId);
+				const equipmentType = await ctx.db.get(equipment.equipmentTypeId);
+				return {
+					...equipment,
+					brand,
+					equipmentType,
+				};
+			})
+		);
+
+		return enrichedEquipments;
 	},
 });
 

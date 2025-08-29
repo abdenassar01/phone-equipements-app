@@ -208,7 +208,7 @@ function BrandsTab({ modalState, setModalState }: { modalState: ModalState | nul
                 <h3 className="font-semibold">{brand.name}</h3>
                 {brand.logo && (
                   <div className="mt-2">
-                    <ImageDisplay storageId={brand.logo} alt={brand.name} className="w-12 h-12 object-contain" />
+                    <ImageDisplay storageId={brand.logo} alt={brand.name} className="w-12 h-12 object-contain rounded-lg" />
                   </div>
                 )}
               </div>

@@ -1,9 +1,10 @@
 import React from 'react'
 import type { Doc } from '@phone-equipements-app/backend/convex/_generated/dataModel'
+import { ImageDisplay } from '@/components/ui/image-display'
 
 type Equipment = Doc<"equipments"> & {
-  brand?: Doc<"brands">
-  equipmentType?: Doc<"equipmentTypes">
+  brand: Doc<"brands"> | null
+  equipmentType: Doc<"equipmentTypes"> | null
 }
 
 interface EquipmentCardProps {
@@ -13,6 +14,9 @@ interface EquipmentCardProps {
 export function EquipmentCard({ equipment }: EquipmentCardProps) {
   return (
     <div className="sm:w-[32.9%] rounded-xl p-2 border border-pink-500/20">
+      {equipment.brand?.logo && (
+        <ImageDisplay storageId={equipment.brand.logo} alt={equipment.brand.name} className="w-12 h-12 object-contain rounded-lg" />
+      )}
       <div className="space-y-2">
         <h3 className="font-semibold text-lg">{equipment.label}</h3>
 
