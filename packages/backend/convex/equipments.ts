@@ -14,21 +14,59 @@ const variantSchema = v.object({
 	})),
 });
 
-// Queries
 export const getAllEquipments = query({
 	args: {
 		limit: v.optional(v.number()),
+		search: v.optional(v.string()),
+		brandId: v.optional(v.id("brands")),
+		equipmentTypeId: v.optional(v.id("equipmentTypes")),
 	},
 	handler: async (ctx, args) => {
-		let query = ctx.db.query("equipments").order("desc");
-    const nbrOfItems = args.limit || 100;
+		const nbrOfItems = args.limit || 100;
+		let equipments;
 
-		// if (args.limit) {
-    //   // @ts-ignore
-		// 	query = query.take(args.limit) ;
-		// }
+		if (args.brandId && args.equipmentTypeId) {
+			equipments = await ctx.db
+				.query("equipments")
+				.withIndex("by_brand_and_type", (q) =>
+					q.eq("brandId", args.brandId!).eq("equipmentTypeId", args.equipmentTypeId!)
+				)
+				.order("desc")
+				.take(nbrOfItems);
+		}
 
-		return await query.take(nbrOfItems);
+		else if (args.brandId) {
+			equipments = await ctx.db
+				.query("equipments")
+				.withIndex("by_brand", (q) => q.eq("brandId", args.brandId!))
+				.order("desc")
+				.take(nbrOfItems);
+		}
+
+		else if (args.equipmentTypeId) {
+			equipments = await ctx.db
+				.query("equipments")
+				.withIndex("by_equipment_type", (q) => q.eq("equipmentTypeId", args.equipmentTypeId!))
+				.order("desc")
+				.take(nbrOfItems);
+		}
+
+		else {
+			equipments = await ctx.db
+				.query("equipments")
+				.order("desc")
+				.take(nbrOfItems);
+		}
+
+		if (args.search && args.search.trim()) {
+			const searchTerm = args.search.toLowerCase().trim();
+			equipments = equipments.filter(equipment =>
+				equipment.label.toLowerCase().includes(searchTerm) ||
+				equipment.description.toLowerCase().includes(searchTerm)
+			);
+		}
+
+		return equipments;
 	},
 });
 

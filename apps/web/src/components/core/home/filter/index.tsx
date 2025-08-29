@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery } from 'convex/react'
 import { api } from '@phone-equipements-app/backend/convex/_generated/api'
+import { useSearchParams } from 'react-router'
 import { Input } from '../../../ui/input'
 import { Button } from '../../../ui/button'
 import {
@@ -27,6 +28,7 @@ interface EquipmentsFilterProps {
 
 
 export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
+  const [searchParams] = useSearchParams()
   const brands = useQuery(api.brands.getAllBrands)
   const equipmentTypes = useQuery(api.equipmentTypes.getAllEquipmentTypes)
 
@@ -35,6 +37,16 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
     phoneMark: 'All Brands',
     equipmentType: 'All Types'
   })
+
+  // Initialize filters from URL parameters
+  useEffect(() => {
+    const urlFilters = {
+      search: searchParams.get('search') || '',
+      phoneMark: searchParams.get('brand') || 'All Brands',
+      equipmentType: searchParams.get('type') || 'All Types'
+    }
+    setFilters(urlFilters)
+  }, [searchParams])
 
   // Create arrays with "All" options and database data
   const phoneMarks = ['All Brands', ...(brands?.map(brand => brand.name) || [])]
