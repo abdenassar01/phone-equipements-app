@@ -130,7 +130,6 @@ export const createEquipment = mutation({
 		description: v.string(),
 		brandId: v.id("brands"),
 		equipmentTypeId: v.id("equipmentTypes"),
-		images: v.array(v.string()),
 		variants: v.array(variantSchema),
 	},
 	handler: async (ctx, args) => {
@@ -150,7 +149,6 @@ export const updateEquipment = mutation({
 		description: v.optional(v.string()),
 		brandId: v.optional(v.id("brands")),
 		equipmentTypeId: v.optional(v.id("equipmentTypes")),
-		images: v.optional(v.array(v.string())),
 		variants: v.optional(v.array(variantSchema)),
 	},
 	handler: async (ctx, args) => {

@@ -13,16 +13,6 @@ interface EquipmentCardProps {
 export function EquipmentCard({ equipment }: EquipmentCardProps) {
   return (
     <div className="sm:w-[32.9%] rounded-xl p-2 border border-pink-500/20">
-      {equipment.images && equipment.images.length > 0 && (
-        <div className="aspect-square mb-3 overflow-hidden rounded-md">
-          <img
-            src={equipment.images[0]}
-            alt={equipment.label}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      )}
-
       <div className="space-y-2">
         <h3 className="font-semibold text-lg">{equipment.label}</h3>
 
@@ -38,14 +28,14 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
 
         {equipment.variants && equipment.variants.length > 0 && (
           <div className="space-y-1">
-            <p className="text-sm font-medium">Available variants:</p>
+            <p className="text-sm font-medium">Variantes disponibles :</p>
             <div className="flex flex-wrap gap-1">
               {equipment.variants.slice(0, 3).map((variant, index) => (
                 <span
                   key={index}
                   className="text-xs bg-purple-500/10 text-purple-500 px-2 py-1 rounded"
                 >
-                  {variant.label} - {variant.price} MAD
+                  {variant.label} - {variant.price} DH
                 </span>
               ))}
             </div>

@@ -3,12 +3,12 @@ import { v } from "convex/values";
 
 export default defineSchema({
 	// Brand table for phone manufacturers
-	brands: defineTable({
-		name: v.string(),
-		logo: v.optional(v.string()), // URL to brand logo
-		createdAt: v.number(),
-		updatedAt: v.number(),
-	}).index("by_name", ["name"]),
+  brands: defineTable({
+    name: v.string(),
+    logo: v.optional(v.id("_storage")), // Convex storage ID for brand logo
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index("by_name", ["name"]),
 
 	// Equipment types (screen, battery, back cover, etc.)
 	equipmentTypes: defineTable({
@@ -24,12 +24,10 @@ export default defineSchema({
 		description: v.string(),
 		brandId: v.id("brands"), // Reference to brand
 		equipmentTypeId: v.id("equipmentTypes"), // Reference to equipment type
-		images: v.array(v.string()), // Array of image URLs
 		variants: v.array(v.object({
 			label: v.string(), // Variant name (e.g., "iPhone 14 Pro", "Black", "128GB")
-			price: v.number(), // Price in cents
-			sku: v.optional(v.string()), // Stock keeping unit
-			inStock: v.optional(v.boolean()),
+			price: v.number(),
+			stock: v.optional(v.string()),
 			attributes: v.optional(v.object({
 				color: v.optional(v.string()),
 				size: v.optional(v.string()),
@@ -59,7 +57,7 @@ export default defineSchema({
 		label: v.string(), // Product name
 		description: v.optional(v.string()),
 		categoryId: v.id("accessoryCategories"), // Reference to category
-		images: v.array(v.string()), // Array of image URLs
+		images: v.optional(v.array(v.id("_storage"))), // Array of Convex storage IDs
 		price: v.number(), // Price in cents
 		sku: v.optional(v.string()),
 		inStock: v.optional(v.boolean()),
@@ -80,10 +78,4 @@ export default defineSchema({
 		.index("by_category", ["categoryId"])
 		.index("by_price", ["price"])
 		.index("by_updated_at", ["updatedAt"]),
-
-	// Keep existing todos table if needed
-	todos: defineTable({
-		text: v.string(),
-		completed: v.boolean(),
-	}),
 });

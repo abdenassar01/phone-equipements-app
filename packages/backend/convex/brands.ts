@@ -28,7 +28,7 @@ export const getBrandByName = query({
 export const createBrand = mutation({
 	args: {
 		name: v.string(),
-		logo: v.optional(v.string()),
+		logo: v.optional(v.id("_storage")),
 	},
 	handler: async (ctx, args) => {
 		const now = Date.now();
@@ -45,7 +45,7 @@ export const updateBrand = mutation({
 	args: {
 		id: v.id("brands"),
 		name: v.optional(v.string()),
-		logo: v.optional(v.string()),
+		logo: v.optional(v.id("_storage")),
 	},
 	handler: async (ctx, args) => {
 		const { id, ...updates } = args;

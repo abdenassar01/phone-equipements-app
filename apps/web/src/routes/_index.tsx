@@ -21,14 +21,12 @@ export default function Home() {
 	const brands = useQuery(api.brands.getAllBrands);
 	const equipmentTypes = useQuery(api.equipmentTypes.getAllEquipmentTypes);
 
-	// Get current filter values from URL
 	const currentFilters = {
 		search: searchParams.get('search') || '',
-		phoneMark: searchParams.get('brand') || 'All Brands',
-		equipmentType: searchParams.get('type') || 'All Types'
+		phoneMark: searchParams.get('brand') || 'Toutes les Marques',
+		equipmentType: searchParams.get('type') || 'Tous les Types'
 	};
 
-	// Build query parameters for backend filtering
 	const queryParams = useMemo(() => {
 		const params: {
 			limit: number;
@@ -37,21 +35,18 @@ export default function Home() {
 			equipmentTypeId?: Id<"equipmentTypes">;
 		} = { limit: 100 };
 
-		// Add search parameter
 		if (currentFilters.search) {
 			params.search = currentFilters.search;
 		}
 
-		// Add brand filter
-		if (currentFilters.phoneMark !== 'All Brands' && brands) {
+		if (currentFilters.phoneMark !== 'Toutes les Marques' && brands) {
 			const selectedBrand = brands.find(brand => brand.name === currentFilters.phoneMark);
 			if (selectedBrand) {
 				params.brandId = selectedBrand._id;
 			}
 		}
 
-		// Add equipment type filter
-		if (currentFilters.equipmentType !== 'All Types' && equipmentTypes) {
+		if (currentFilters.equipmentType !== 'Tous les Types' && equipmentTypes) {
 			const selectedType = equipmentTypes.find(type => type.name === currentFilters.equipmentType);
 			if (selectedType) {
 				params.equipmentTypeId = selectedType._id;
@@ -61,17 +56,16 @@ export default function Home() {
 		return params;
 	}, [currentFilters.search, currentFilters.phoneMark, currentFilters.equipmentType, brands, equipmentTypes]);
 
-	// Fetch filtered equipments from backend
+
 	const equipments = useQuery(api.equipments.getAllEquipments, queryParams);
 
-	// Handle filter changes
-	const handleFilterChange = (filters: { search: string; phoneMark: string; equipmentType: string }) => {
+	const handleFilterChange = (filters: { search: string; phoneMark: string;equipmentType: string }) => {
 		const newParams = new URLSearchParams();
-		
+
 		if (filters.search) newParams.set('search', filters.search);
-		if (filters.phoneMark !== 'All Brands') newParams.set('brand', filters.phoneMark);
-		if (filters.equipmentType !== 'All Types') newParams.set('type', filters.equipmentType);
-		
+		if (filters.phoneMark !== 'Toutes les Marques') newParams.set('brand', filters.phoneMark);
+		if (filters.equipmentType !== 'Tous les Types') newParams.set('type', filters.equipmentType);
+
 		setSearchParams(newParams);
 	};
 
@@ -79,7 +73,7 @@ export default function Home() {
 		<div className="">
 			<EquipmentsFilter onFilterChange={handleFilterChange} />
 			<div className="py-2 gap-2 flex flex-col sm:flex-row sm:flex-wrap sm:justify-between">
-				{equipments === undefined && <div>loading...</div>}
+				{equipments === undefined && <div>chargement...</div>}
 				{equipments?.map((equipment) => (
 					<EquipmentCard key={equipment._id} equipment={equipment} />
 				))}

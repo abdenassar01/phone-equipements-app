@@ -34,23 +34,23 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
 
   const [filters, setFilters] = useState<FilterState>({
     search: '',
-    phoneMark: 'All Brands',
-    equipmentType: 'All Types'
+    phoneMark: 'Toutes les Marques',
+    equipmentType: 'Tous les Types'
   })
 
   // Initialize filters from URL parameters
   useEffect(() => {
     const urlFilters = {
       search: searchParams.get('search') || '',
-      phoneMark: searchParams.get('brand') || 'All Brands',
-      equipmentType: searchParams.get('type') || 'All Types'
+      phoneMark: searchParams.get('brand') || 'Toutes les Marques',
+      equipmentType: searchParams.get('type') || 'Tous les Types'
     }
     setFilters(urlFilters)
   }, [searchParams])
 
   // Create arrays with "All" options and database data
-  const phoneMarks = ['All Brands', ...(brands?.map(brand => brand.name) || [])]
-  const equipmentTypeOptions = ['All Types', ...(equipmentTypes?.map(type => type.name) || [])]
+  const phoneMarks = ['Toutes les Marques', ...(brands?.map(brand => brand.name) || [])]
+  const equipmentTypeOptions = ['Tous les Types', ...(equipmentTypes?.map(type => type.name) || [])]
 
   const updateFilter = (key: keyof FilterState, value: string) => {
     const newFilters = { ...filters, [key]: value }
@@ -61,19 +61,19 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
   const clearFilters = () => {
     const clearedFilters = {
       search: '',
-      phoneMark: 'All Brands',
-      equipmentType: 'All Types'
+      phoneMark: 'Toutes les Marques',
+      equipmentType: 'Tous les Types'
     }
     setFilters(clearedFilters)
     onFilterChange?.(clearedFilters)
   }
 
-  const hasActiveFilters = filters.search || filters.phoneMark !== 'All Brands' || filters.equipmentType !== 'All Types'
+  const hasActiveFilters = filters.search || filters.phoneMark !== 'Toutes les Marques' || filters.equipmentType !== 'Tous les Types'
 
   return (
     <div className="p-2 bg-card rounded-lg border border-pink-500/20">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold">Filter Equipment</h3>
+        <h3 className="text-lg font-semibold">Filtrer les Équipements</h3>
         {hasActiveFilters && (
           <Button
             variant="ghost"
@@ -82,7 +82,7 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
             className="text-muted-foreground hover:text-foreground"
           >
             <XIcon className="w-4 h-4 mr-1" />
-            Clear All
+            Tout Effacer
           </Button>
         )}
       </div>
@@ -90,7 +90,7 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
       <div className="relative">
         <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
         <Input
-          placeholder="Search equipment by name or model..."
+          placeholder="Rechercher un équipement par nom ou modèle..."
           value={filters.search}
           onChange={(e) => updateFilter('search', e.target.value)}
           className="pl-10"
@@ -99,14 +99,14 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground">Phone Brand</label>
+          <label className="text-sm font-medium text-foreground">Marque de Téléphone</label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
                 className={cn(
                   "w-full justify-between",
-                  filters.phoneMark !== 'All Brands' && "border-pink-500/50 bg-pink-500/5"
+                  filters.phoneMark !== 'Toutes les Marques' && "border-pink-500/50 bg-pink-500/5"
                 )}
               >
                 <span className="truncate">{filters.phoneMark}</span>
@@ -114,7 +114,7 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
-              <DropdownMenuLabel>Select Brand</DropdownMenuLabel>
+              <DropdownMenuLabel>Sélectionner une Marque</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {phoneMarks.map((mark) => (
                 <DropdownMenuItem
@@ -133,14 +133,14 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground">Equipment Type</label>
+          <label className="text-sm font-medium text-foreground">Type d'Équipement</label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
                 className={cn(
                   "w-full justify-between",
-                  filters.equipmentType !== 'All Types' && "border-pink-500/50 bg-pink-500/5"
+                  filters.equipmentType !== 'Tous les Types' && "border-pink-500/50 bg-pink-500/5"
                 )}
               >
                 <span className="truncate">{filters.equipmentType}</span>
@@ -148,7 +148,7 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
-              <DropdownMenuLabel>Select Type</DropdownMenuLabel>
+              <DropdownMenuLabel>Sélectionner un Type</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {equipmentTypeOptions.map((type) => (
                 <DropdownMenuItem
@@ -169,10 +169,10 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
 
       {hasActiveFilters && (
         <div className="flex flex-wrap gap-2 pt-2 border-t">
-          <span className="text-sm text-muted-foreground">Active filters:</span>
+          <span className="text-sm text-muted-foreground">Filtres actifs :</span>
           {filters.search && (
             <span className="inline-flex items-center gap-1 px-2 py-1 bg-pink-500/10 text-pink-500 rounded-md text-xs">
-              Search: "{filters.search}"
+              Recherche : "{filters.search}"
               <button
                 onClick={() => updateFilter('search', '')}
                 className="hover:bg-pink-500/20 rounded-full p-0.5"
@@ -181,22 +181,22 @@ export function EquipmentsFilter({ onFilterChange }: EquipmentsFilterProps) {
               </button>
             </span>
           )}
-          {filters.phoneMark !== 'All Brands' && (
+          {filters.phoneMark !== 'Toutes les Marques' && (
             <span className="inline-flex items-center gap-1 px-2 py-1 bg-pink-500/10 text-pink-500 rounded-md text-xs">
-              Brand: {filters.phoneMark}
+              Marque : {filters.phoneMark}
               <button
-                onClick={() => updateFilter('phoneMark', 'All Brands')}
+                onClick={() => updateFilter('phoneMark', 'Toutes les Marques')}
                 className="hover:bg-pink-500/20 rounded-full p-0.5"
               >
                 <XIcon className="w-3 h-3" />
               </button>
             </span>
           )}
-          {filters.equipmentType !== 'All Types' && (
+          {filters.equipmentType !== 'Tous les Types' && (
             <span className="inline-flex items-center gap-1 px-2 py-1 bg-pink-500/10 text-pink-500 rounded-md text-xs">
-              Type: {filters.equipmentType}
+              Type : {filters.equipmentType}
               <button
-                onClick={() => updateFilter('equipmentType', 'All Types')}
+                onClick={() => updateFilter('equipmentType', 'Tous les Types')}
                 className="hover:bg-pink-500/20 rounded-full p-0.5"
               >
                 <XIcon className="w-3 h-3" />

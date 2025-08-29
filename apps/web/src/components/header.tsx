@@ -6,8 +6,8 @@ import {  Airpod03FreeIcons, HoldPhoneFreeIcons } from "@hugeicons/core-free-ico
 
 export default function Header() {
 	const links = [
-		{ to: "/", label: "Piece de change", icon: HoldPhoneFreeIcons },
-		{ to: "/accessories", label: "Accessores", icon: Airpod03FreeIcons },
+		{ to: "/", label: "Pièces de rechange", icon: HoldPhoneFreeIcons },
+		{ to: "/accessories", label: "Accessoires", icon: Airpod03FreeIcons },
 	] as const;
 
 	return (

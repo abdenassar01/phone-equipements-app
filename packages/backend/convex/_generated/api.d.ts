@@ -18,6 +18,7 @@ import type * as accessoryCategories from "../accessoryCategories.js";
 import type * as brands from "../brands.js";
 import type * as equipmentTypes from "../equipmentTypes.js";
 import type * as equipments from "../equipments.js";
+import type * as files from "../files.js";
 import type * as healthCheck from "../healthCheck.js";
 
 /**
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   brands: typeof brands;
   equipmentTypes: typeof equipmentTypes;
   equipments: typeof equipments;
+  files: typeof files;
   healthCheck: typeof healthCheck;
 }>;
 export declare const api: FilterApi<
