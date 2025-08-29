@@ -60,9 +60,9 @@ export default function AdminPanel() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "px-4 py-2 rounded-t-lg font-medium transition-colors",
+                "px-4 py-2 rounded-lg font-medium transition-colors",
                 activeTab === tab.id
-                  ? "bg-pink-500 text-white"
+                  ? "bg-pink-500/10 text-pink-500"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               )}
             >
@@ -240,15 +240,26 @@ function EquipmentsTab({ modalState, setModalState }: { modalState: ModalState |
     description: '',
     brandId: '',
     equipmentTypeId: '',
-    images: '',
-    variants: ''
+    images: ''
   })
+
+  const [variants, setVariants] = useState<Array<{
+    label: string
+    price: string
+    sku: string
+    inStock: boolean
+  }>>([{ label: '', price: '', sku: '', inStock: true }])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
       const imagesArray = formData.images.split(',').map(img => img.trim()).filter(Boolean)
-      const variantsArray = formData.variants ? JSON.parse(formData.variants) : []
+      const variantsArray = variants.map(v => ({
+        label: v.label,
+        price: parseFloat(v.price),
+        sku: v.sku,
+        inStock: v.inStock
+      })).filter(v => v.label && v.price)
 
       if (modalState?.type === 'create') {
         await createEquipment({
@@ -271,7 +282,8 @@ function EquipmentsTab({ modalState, setModalState }: { modalState: ModalState |
         })
       }
       setModalState(null)
-      setFormData({ label: '', description: '', brandId: '', equipmentTypeId: '', images: '', variants: '' })
+      setFormData({ label: '', description: '', brandId: '', equipmentTypeId: '', images: '' })
+      setVariants([{ label: '', price: '', sku: '', inStock: true }])
     } catch (error) {
       console.error('Error saving equipment:', error)
     }
@@ -284,9 +296,14 @@ function EquipmentsTab({ modalState, setModalState }: { modalState: ModalState |
       description: equipment.description,
       brandId: equipment.brandId,
       equipmentTypeId: equipment.equipmentTypeId,
-      images: equipment.images.join(', '),
-      variants: JSON.stringify(equipment.variants, null, 2)
+      images: equipment.images.join(', ')
     })
+    setVariants(equipment.variants.map(v => ({
+      label: v.label || '',
+      price: v.price?.toString() || '',
+      sku: v.sku || '',
+      inStock: v.inStock ?? true
+    })))
   }
 
   const handleDelete = async (id: Id<'equipments'>) => {
@@ -297,12 +314,30 @@ function EquipmentsTab({ modalState, setModalState }: { modalState: ModalState |
 
   const openCreateModal = () => {
     setModalState({ isOpen: true, type: 'create', entity: 'equipments' })
-    setFormData({ label: '', description: '', brandId: '', equipmentTypeId: '', images: '', variants: '' })
+    setFormData({ label: '', description: '', brandId: '', equipmentTypeId: '', images: '' })
+    setVariants([{ label: '', price: '', sku: '', inStock: true }])
   }
 
   const closeModal = () => {
     setModalState(null)
-    setFormData({ label: '', description: '', brandId: '', equipmentTypeId: '', images: '', variants: '' })
+    setFormData({ label: '', description: '', brandId: '', equipmentTypeId: '', images: '' })
+    setVariants([{ label: '', price: '', sku: '', inStock: true }])
+  }
+
+  const addVariant = () => {
+    setVariants([...variants, { label: '', price: '', sku: '', inStock: true }])
+  }
+
+  const removeVariant = (index: number) => {
+    if (variants.length > 1) {
+      setVariants(variants.filter((_, i) => i !== index))
+    }
+  }
+
+  const updateVariant = (index: number, field: string, value: string | boolean) => {
+    const updatedVariants = [...variants]
+    updatedVariants[index] = { ...updatedVariants[index], [field]: value }
+    setVariants(updatedVariants)
   }
 
   return (
@@ -387,14 +422,80 @@ function EquipmentsTab({ modalState, setModalState }: { modalState: ModalState |
               />
             </div>
             <div>
-              <Label htmlFor="variants">Variants (JSON format)</Label>
-              <textarea
-                id="variants"
-                value={formData.variants}
-                onChange={(e) => setFormData({ ...formData, variants: e.target.value })}
-                className="w-full min-h-[120px] px-3 py-2 rounded-md border border-input bg-background font-mono text-sm"
-                placeholder='[{"label": "Variant 1", "price": 2999, "sku": "SKU001", "inStock": true}]'
-              />
+              <div className="flex justify-between items-center mb-3">
+                <Label>Variants</Label>
+                <Button
+                  type="button"
+                  onClick={addVariant}
+                  className="bg-blue-500 hover:bg-blue-600 text-xs px-2 py-1 h-auto"
+                >
+                  <PlusIcon className="w-3 h-3 mr-1" />
+                  Add Variant
+                </Button>
+              </div>
+              <div className="space-y-3">
+                {variants.map((variant, index) => (
+                  <div key={index} className="border rounded-lg p-3 bg-gray-50">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium">Variant {index + 1}</span>
+                      {variants.length > 1 && (
+                        <Button
+                          type="button"
+                          onClick={() => removeVariant(index)}
+                          variant="destructive"
+                          className="text-xs px-2 py-1 h-auto"
+                        >
+                          <XIcon className="w-3 h-3" />
+                        </Button>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                      <div>
+                        <Label htmlFor={`variant-label-${index}`} className="text-xs">Label</Label>
+                        <Input
+                          id={`variant-label-${index}`}
+                          value={variant.label}
+                          onChange={(e) => updateVariant(index, 'label', e.target.value)}
+                          placeholder="e.g., 64GB"
+                          className="text-sm"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`variant-price-${index}`} className="text-xs">Price</Label>
+                        <Input
+                          id={`variant-price-${index}`}
+                          type="number"
+                          step="0.01"
+                          value={variant.price}
+                          onChange={(e) => updateVariant(index, 'price', e.target.value)}
+                          placeholder="0.00"
+                          className="text-sm"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`variant-sku-${index}`} className="text-xs">SKU</Label>
+                        <Input
+                          id={`variant-sku-${index}`}
+                          value={variant.sku}
+                          onChange={(e) => updateVariant(index, 'sku', e.target.value)}
+                          placeholder="SKU001"
+                          className="text-sm"
+                        />
+                      </div>
+                      <div className="flex items-center space-x-2 pt-5">
+                        <input
+                          id={`variant-instock-${index}`}
+                          type="checkbox"
+                          checked={variant.inStock}
+                          onChange={(e) => updateVariant(index, 'inStock', e.target.checked)}
+                          className="rounded"
+                        />
+                        <Label htmlFor={`variant-instock-${index}`} className="text-xs">In Stock</Label>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
               <div className="flex gap-2">
                 <Button type="submit" className="bg-green-500 hover:bg-green-600">

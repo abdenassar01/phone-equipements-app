@@ -45,12 +45,9 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
                   key={index}
                   className="text-xs bg-purple-500/10 text-purple-500 px-2 py-1 rounded"
                 >
-                  {variant.price} MAD
+                  {variant.label} - {variant.price} MAD
                 </span>
               ))}
-              {equipment.variants.length > 3 && (
-                <span className="text-xs text-gray-500">+{equipment.variants.length - 3} more</span>
-              )}
             </div>
           </div>
         )}
