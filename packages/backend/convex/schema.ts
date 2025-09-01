@@ -60,7 +60,6 @@ export default defineSchema({
 		images: v.optional(v.array(v.id("_storage"))), // Array of Convex storage IDs
 		price: v.number(), // Price in cents
 		sku: v.optional(v.string()),
-		inStock: v.optional(v.boolean()),
 		features: v.optional(v.array(v.string())), // Product features
 		specifications: v.optional(v.object({
 			brand: v.optional(v.string()),

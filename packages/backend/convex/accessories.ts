@@ -82,7 +82,6 @@ export const createAccessory = mutation({
 		images: v.optional(v.array(v.id("_storage"))),
 		price: v.number(),
 		sku: v.optional(v.string()),
-		inStock: v.optional(v.boolean()),
 		features: v.optional(v.array(v.string())),
 		specifications: v.optional(specificationsSchema),
 	},
@@ -105,7 +104,6 @@ export const updateAccessory = mutation({
 		images: v.optional(v.array(v.id("_storage"))),
 		price: v.optional(v.number()),
 		sku: v.optional(v.string()),
-		inStock: v.optional(v.boolean()),
 		features: v.optional(v.array(v.string())),
 		specifications: v.optional(specificationsSchema),
 	},
@@ -128,11 +126,9 @@ export const deleteAccessory = mutation({
 export const updateAccessoryStock = mutation({
 	args: {
 		id: v.id("accessories"),
-		inStock: v.boolean(),
 	},
 	handler: async (ctx, args) => {
 		return await ctx.db.patch(args.id, {
-			inStock: args.inStock,
 			updatedAt: Date.now(),
 		});
 	},
