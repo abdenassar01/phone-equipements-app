@@ -2,15 +2,13 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
-	// Brand table for phone manufacturers
   brands: defineTable({
     name: v.string(),
-    logo: v.optional(v.id("_storage")), // Convex storage ID for brand logo
+    logo: v.optional(v.id("_storage")),
     createdAt: v.number(),
     updatedAt: v.number(),
   }).index("by_name", ["name"]),
 
-	// Equipment types (screen, battery, back cover, etc.)
 	equipmentTypes: defineTable({
 		name: v.string(),
 		description: v.optional(v.string()),
@@ -18,21 +16,20 @@ export default defineSchema({
 		updatedAt: v.number(),
 	}).index("by_name", ["name"]),
 
-	// Equipment products with variants
 	equipments: defineTable({
-		label: v.string(), // Product name/title
+		label: v.string(),
 		description: v.string(),
-		brandId: v.id("brands"), // Reference to brand
-		equipmentTypeId: v.id("equipmentTypes"), // Reference to equipment type
+		brandId: v.id("brands"),
+		equipmentTypeId: v.id("equipmentTypes"),
 		variants: v.array(v.object({
-			label: v.string(), // Variant name (e.g., "iPhone 14 Pro", "Black", "128GB")
+			label: v.string(),
 			price: v.number(),
 			stock: v.optional(v.string()),
 			attributes: v.optional(v.object({
 				color: v.optional(v.string()),
 				size: v.optional(v.string()),
 				material: v.optional(v.string()),
-				compatibility: v.optional(v.array(v.string())), // Compatible phone models
+				compatibility: v.optional(v.array(v.string())),
 			})),
 		})),
 		createdAt: v.number(),
@@ -43,24 +40,23 @@ export default defineSchema({
 		.index("by_brand_and_type", ["brandId", "equipmentTypeId"])
 		.index("by_updated_at", ["updatedAt"]),
 
-	// Accessory categories (airpods, chargers, cases, etc.)
 	accessoryCategories: defineTable({
 		name: v.string(),
 		description: v.optional(v.string()),
-		icon: v.optional(v.string()), // Icon name or URL
+		icon: v.optional(v.string()),
 		createdAt: v.number(),
 		updatedAt: v.number(),
 	}).index("by_name", ["name"]),
 
-	// Accessories table
 	accessories: defineTable({
-		label: v.string(), // Product name
+		label: v.string(),
 		description: v.optional(v.string()),
-		categoryId: v.id("accessoryCategories"), // Reference to category
-		images: v.optional(v.array(v.id("_storage"))), // Array of Convex storage IDs
-		price: v.number(), // Price in cents
+		categoryId: v.id("accessoryCategories"),
+		images: v.optional(v.array(v.id("_storage"))),
+		price: v.number(),
 		sku: v.optional(v.string()),
-		features: v.optional(v.array(v.string())), // Product features
+		inStock: v.optional(v.boolean()),
+		features: v.optional(v.array(v.string())),
 		specifications: v.optional(v.object({
 			brand: v.optional(v.string()),
 			model: v.optional(v.string()),
@@ -68,8 +64,8 @@ export default defineSchema({
 			material: v.optional(v.string()),
 			dimensions: v.optional(v.string()),
 			weight: v.optional(v.string()),
-			connectivity: v.optional(v.array(v.string())), // Bluetooth, USB-C, etc.
-			compatibility: v.optional(v.array(v.string())), // Compatible devices
+			connectivity: v.optional(v.array(v.string())),
+			compatibility: v.optional(v.array(v.string())),
 		})),
 		createdAt: v.number(),
 		updatedAt: v.number(),

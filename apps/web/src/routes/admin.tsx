@@ -895,6 +895,7 @@ function AccessoriesTab({ modalState, setModalState }: { modalState: ModalState 
     description: '',
     price: '',
     sku: '',
+    inStock: true,
     categoryId: '',
     images: [] as Id<'_storage'>[]
   })
@@ -908,6 +909,7 @@ function AccessoriesTab({ modalState, setModalState }: { modalState: ModalState 
           description: formData.description,
           price: parseFloat(formData.price),
           sku: formData.sku,
+          inStock: formData.inStock,
           categoryId: formData.categoryId as Id<'accessoryCategories'>,
           images: formData.images.length > 0 ? formData.images : undefined
         })
@@ -918,6 +920,7 @@ function AccessoriesTab({ modalState, setModalState }: { modalState: ModalState 
           description: formData.description,
           price: parseFloat(formData.price),
           sku: formData.sku,
+          inStock: formData.inStock,
           categoryId: formData.categoryId as Id<'accessoryCategories'>,
           images: formData.images.length > 0 ? formData.images : undefined
         })
@@ -928,6 +931,7 @@ function AccessoriesTab({ modalState, setModalState }: { modalState: ModalState 
         description: '',
         price: '',
         sku: '',
+        inStock: true,
         categoryId: '',
         images: []
       })
@@ -943,6 +947,7 @@ function AccessoriesTab({ modalState, setModalState }: { modalState: ModalState 
       price: accessory.price.toString(),
       description: accessory.description || '',
       sku: accessory.sku || '0',
+      inStock: accessory.inStock || false,
       categoryId: accessory.categoryId,
       images: accessory.images || []
     })
@@ -959,6 +964,7 @@ function AccessoriesTab({ modalState, setModalState }: { modalState: ModalState 
     setFormData({
       label: '',
       description: '',
+      inStock: true,
       price: '',
       sku: '',
       categoryId: '',
@@ -973,6 +979,7 @@ function AccessoriesTab({ modalState, setModalState }: { modalState: ModalState 
       description: '',
       price: '',
       sku: '',
+      inStock: true,
       categoryId: '',
       images: []
     })
@@ -991,6 +998,7 @@ function AccessoriesTab({ modalState, setModalState }: { modalState: ModalState 
         </Button>
       </div>
 
+      {/* Modal for Create/Edit */}
       {modalState?.entity === 'accessories' && (
         <Modal title='' isOpen={modalState.isOpen} onClose={closeModal}>
           <div className="p-6">
@@ -1062,7 +1070,16 @@ function AccessoriesTab({ modalState, setModalState }: { modalState: ModalState 
                     accept="image/*"
                   />
                 </div>
-
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="inStock"
+                    checked={formData.inStock}
+                    onChange={(e) => setFormData({ ...formData, inStock: e.target.checked })}
+                    className="rounded border-gray-300"
+                  />
+                  <Label htmlFor="inStock">En Stock</Label>
+                </div>
               </div>
               <div className="flex justify-end gap-2">
                 <Button
@@ -1106,6 +1123,9 @@ function AccessoriesTab({ modalState, setModalState }: { modalState: ModalState 
                     </p>
                     <p className="text-xs text-gray-500">
                       <span className="font-medium">Référence :</span> {accessory.sku}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      <span className="font-medium">Stock :</span> {accessory.inStock ? 'En Stock' : 'Rupture de Stock'}
                     </p>
                   </div>
                 </div>
